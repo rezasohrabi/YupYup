@@ -36,12 +36,7 @@ app.get("/api/users/:id", (req, res) => {
 });
 
 app.post("/api/users", (req, res) => {
-  const schema = Joi.object({
-    username: Joi.string().min(8).required(),
-    password: Joi.string(),
-    age: Joi.number().min(18).max(70).required(),
-  });
-  const { error } = schema.validate(req.body);
+  const { error } = validateUser(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
@@ -55,6 +50,32 @@ app.post("/api/users", (req, res) => {
   users.push(user);
   res.send(user);
 });
+
+app.put("/api/users/:id", (req, res) => {
+  const user = users.find((user) => user.id === parseInt(req.params.id));
+  if (!user) {
+    return res.status(404).send("user not found");
+  }
+
+  const { error } = validateUser(req.body);
+  if (error) {
+    return res.status(400).send(error.details[0].message);
+  }
+
+  user.username = req.body.username;
+  user.password = req.body.password;
+  user.age = req.body.age;
+  res.send(user);
+});
+
+function validateUser(body) {
+  const schema = Joi.object({
+    username: Joi.string().min(8).required(),
+    password: Joi.string(),
+    age: Joi.number().min(18).max(70).required(),
+  });
+  return schema.validate(body);
+}
 
 const port = process.env.PORT || 3000;
 app.listen(port, console.log(`listening on port ${port}...`));
