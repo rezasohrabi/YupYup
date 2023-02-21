@@ -1,6 +1,7 @@
 const express = require("express");
 
 const app = express();
+app.use(express.json());
 
 const users = [
   {
@@ -30,6 +31,17 @@ app.get("/api/users/:id", (req, res) => {
   if (!user) {
     return res.status(404).send("user not found");
   }
+  res.send(user);
+});
+
+app.post("/api/users", (req, res) => {
+  const user = {
+    id: users.length + 1,
+    username: req.body.username,
+    password: req.body.password,
+    age: req.body.age,
+  };
+  users.push(user);
   res.send(user);
 });
 
