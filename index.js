@@ -1,4 +1,5 @@
 const express = require("express");
+const Joi = require("joi");
 
 const app = express();
 app.use(express.json());
@@ -35,6 +36,16 @@ app.get("/api/users/:id", (req, res) => {
 });
 
 app.post("/api/users", (req, res) => {
+  const schema = Joi.object({
+    username: Joi.string().min(8).required(),
+    password: Joi.string(),
+    age: Joi.number().min(18).max(70).required(),
+  });
+  const { error } = schema.validate(req.body);
+  if (error) {
+    return res.status(400).send(error.details[0].message);
+  }
+
   const user = {
     id: users.length + 1,
     username: req.body.username,
