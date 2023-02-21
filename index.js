@@ -17,12 +17,20 @@ const users = [
   },
 ];
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
+  res.send("Welcome to Yup Yup api");
+});
+
+app.get("/api/users", (req, res) => {
   res.send(users);
 });
 
-app.get("/users", (req, res) => {
-  res.send(users);
+app.get("/api/users/:id", (req, res) => {
+  const user = users.find((user) => user.id === parseInt(req.params.id));
+  if (!user) {
+    return res.status(404).send("user not found");
+  }
+  res.send(user);
 });
 
 const port = process.env.PORT || 3000;
