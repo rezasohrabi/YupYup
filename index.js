@@ -2,9 +2,10 @@ const express = require("express");
 const Joi = require("joi");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const config = require("config");
+const debug = require("debug")("app:startup");
 const logger = require("./middleware/logger");
 const authenticator = require("./middleware/authenticator");
-const config = require("config");
 
 const app = express();
 app.use(express.json());
@@ -15,7 +16,6 @@ app.use(
 );
 app.use(express.static("public"));
 app.use(helmet());
-app.use(morgan("common"));
 
 app.use(logger);
 app.use(authenticator);
@@ -106,6 +106,11 @@ function validateUser(body) {
     age: Joi.number().min(18).max(70).required(),
   });
   return schema.validate(body);
+}
+
+if (app.get("env") === "development") {
+  app.use(morgan("common"));
+  debug("Morgan enabled...");
 }
 
 const port = process.env.PORT || 3000;
