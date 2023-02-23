@@ -5,6 +5,7 @@ const authenticator = require("/middleware/authenticator");
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded());
 app.use(logger);
 app.use(authenticator);
 
