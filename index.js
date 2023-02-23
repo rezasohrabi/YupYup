@@ -4,6 +4,7 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const logger = require("./middleware/logger");
 const authenticator = require("./middleware/authenticator");
+const config = require("config");
 
 const app = express();
 app.use(express.json());
@@ -18,6 +19,10 @@ app.use(morgan("common"));
 
 app.use(logger);
 app.use(authenticator);
+
+console.log(`Application Name: ${config.get("name")}`);
+console.log(`Mail Server: ${config.get("mail.host")}`);
+console.log(`Mail Password: ${config.get("mail.password")}`);
 
 const users = [
   {

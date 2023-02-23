@@ -1,0 +1,6 @@
+{
+  "name": "Yup Yup development api",
+  "mail": {
+    "host": "dev-mail-server"
+  }
+}
