@@ -1,8 +1,12 @@
 const express = require("express");
 const Joi = require("joi");
+const logger = require("/middleware/logger");
+const authenticator = require("/middleware/authenticator");
 
 const app = express();
 app.use(express.json());
+app.use(logger);
+app.use(authenticator);
 
 const users = [
   {
