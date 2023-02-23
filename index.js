@@ -1,6 +1,7 @@
 const express = require("express");
 const Joi = require("joi");
 const helmet = require("helmet");
+const morgan = require("morgan");
 const logger = require("/middleware/logger");
 const authenticator = require("/middleware/authenticator");
 
@@ -13,6 +14,7 @@ app.use(
 );
 app.use(express.static("public"));
 app.use(helmet());
+app.use(morgan("common"));
 
 app.use(logger);
 app.use(authenticator);
