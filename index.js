@@ -1,12 +1,19 @@
 const express = require("express");
 const Joi = require("joi");
+const helmet = require("helmet");
 const logger = require("/middleware/logger");
 const authenticator = require("/middleware/authenticator");
 
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 app.use(express.static("public"));
+app.use(helmet());
+
 app.use(logger);
 app.use(authenticator);
 
