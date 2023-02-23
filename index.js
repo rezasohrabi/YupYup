@@ -2,8 +2,8 @@ const express = require("express");
 const Joi = require("joi");
 const helmet = require("helmet");
 const morgan = require("morgan");
-const logger = require("/middleware/logger");
-const authenticator = require("/middleware/authenticator");
+const logger = require("./middleware/logger");
+const authenticator = require("./middleware/authenticator");
 
 const app = express();
 app.use(express.json());
