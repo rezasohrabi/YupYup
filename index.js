@@ -44,8 +44,8 @@ const users = [
 
 app.get("/api", (req, res) => {
   res.render("index", {
-    title: "Yup Yup api",
-    message: "Welcome to Yup Yup api",
+    title: config.get("name"),
+    message: `Welcome to ${config.get("name")}`,
     description:
       "you can use routes like localhost:3000/api/users to get results",
   });
