@@ -20,6 +20,9 @@ app.use(helmet());
 app.use(logger);
 app.use(authenticator);
 
+app.set("view engine", "pug");
+app.set("views", "./views");
+
 console.log(`Application Name: ${config.get("name")}`);
 console.log(`Mail Server: ${config.get("mail.host")}`);
 console.log(`Mail Password: ${config.get("mail.password")}`);
@@ -40,6 +43,12 @@ const users = [
 ];
 
 app.get("/api", (req, res) => {
+  res.render("index", {
+    title: "Yup Yup api",
+    message: "Welcome to Yup Yup api",
+    description:
+      "you can use routes like localhost:3000/api/users to get results",
+  });
   res.send("Welcome to Yup Yup api");
 });
 
