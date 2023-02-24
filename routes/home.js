@@ -9,7 +9,6 @@ router.get("/", (req, res) => {
     description:
       "you can use routes like localhost:3000/api/users to get results",
   });
-  res.send("Welcome to Yup Yup api");
 });
 
 module.exports = router;
