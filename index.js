@@ -6,8 +6,10 @@ const config = require("config");
 const debug = require("debug")("app:startup");
 const logger = require("./middleware/logger");
 const authenticator = require("./middleware/authenticator");
-
+const users = require("./routes/users");
+const home = require("./routes/home");
 const app = express();
+
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -19,6 +21,8 @@ app.use(helmet());
 
 app.use(logger);
 app.use(authenticator);
+app.use("/api/users", users);
+app.use("/api", home);
 
 app.set("view engine", "pug");
 app.set("views", "./views");
@@ -26,96 +30,6 @@ app.set("views", "./views");
 console.log(`Application Name: ${config.get("name")}`);
 console.log(`Mail Server: ${config.get("mail.host")}`);
 console.log(`Mail Password: ${config.get("mail.password")}`);
-
-const users = [
-  {
-    id: 1,
-    name: "Leanne Graham",
-  },
-  {
-    id: 2,
-    name: "Ervin Howell",
-  },
-  {
-    id: 3,
-    name: "Clementine Bauch",
-  },
-];
-
-app.get("/api", (req, res) => {
-  res.render("index", {
-    title: config.get("name"),
-    message: `Welcome to ${config.get("name")}`,
-    description:
-      "you can use routes like localhost:3000/api/users to get results",
-  });
-  res.send("Welcome to Yup Yup api");
-});
-
-app.get("/api/users", (req, res) => {
-  res.send(users);
-});
-
-app.get("/api/users/:id", (req, res) => {
-  const user = users.find((user) => user.id === parseInt(req.params.id));
-  if (!user) {
-    return res.status(404).send("user not found");
-  }
-  res.send(user);
-});
-
-app.post("/api/users", (req, res) => {
-  const { error } = validateUser(req.body);
-  if (error) {
-    return res.status(400).send(error.details[0].message);
-  }
-
-  const user = {
-    id: users.length + 1,
-    username: req.body.username,
-    password: req.body.password,
-    age: req.body.age,
-  };
-  users.push(user);
-  res.send(user);
-});
-
-app.put("/api/users/:id", (req, res) => {
-  const user = users.find((user) => user.id === parseInt(req.params.id));
-  if (!user) {
-    return res.status(404).send("user not found");
-  }
-
-  const { error } = validateUser(req.body);
-  if (error) {
-    return res.status(400).send(error.details[0].message);
-  }
-
-  user.username = req.body.username;
-  user.password = req.body.password;
-  user.age = req.body.age;
-  res.send(user);
-});
-
-app.delete("/api/users/:id", (req, res) => {
-  const user = users.find((user) => user.id === parseInt(req.params.id));
-  if (!user) {
-    return res.status(404).send("user not found");
-  }
-
-  const index = users.indexOf(user);
-  users.splice(index, 1);
-  res.send(user);
-});
-
-function validateUser(body) {
-  const schema = Joi.object({
-    username: Joi.string().min(8).required(),
-    password: Joi.string(),
-    age: Joi.number().min(18).max(70).required(),
-  });
-  return schema.validate(body);
-}
 
 if (app.get("env") === "development") {
   app.use(morgan("common"));
