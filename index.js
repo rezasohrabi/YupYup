@@ -9,6 +9,7 @@ const logger = require("./middleware/logger");
 const authenticator = require("./middleware/authenticator");
 const users = require("./routes/users");
 const home = require("./routes/home");
+const mongoose = require("mongoose");
 const app = express();
 
 app.set("view engine", "pug");
@@ -24,6 +25,17 @@ app.use(authenticator);
 debug(`Application Name: ${config.get("name")}`);
 debug(`Mail Server: ${config.get("mail.host")}`);
 debug(`Mail Password: ${config.get("mail.password")}`);
+
+try {
+  mongoose.connect(
+    `${config.get("database.host")}${config.get("database.port")}/${config.get(
+      "database.name"
+    )}`
+  );
+  debug("Connected to mongodb");
+} catch (error) {
+  debug("Connection to mongodb failed due to", error);
+}
 
 if (app.get("env") == "production") {
   app.use(

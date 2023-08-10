@@ -2,5 +2,10 @@
   "name": "Yup Yup development api",
   "mail": {
     "host": "dev-mail-server"
+  },
+  "database": {
+    "name": "YupYup",
+    "host": "mongodb://localhost:",
+    "port": "27017"
   }
 }
